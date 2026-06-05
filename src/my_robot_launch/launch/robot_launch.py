@@ -9,7 +9,7 @@ def generate_launch_description():
     rviz_config_file = os.path.join(my_package_dir, 'rviz', 'robot_launch.rviz')
   
     # List of nodes to launch
-    nodes = [
+    nodes = [  
         # RViz visualization
         Node(
             package='rviz2',
@@ -19,5 +19,7 @@ def generate_launch_description():
             output='screen'
         )
     ]
+  
+    return LaunchDescription(nodes)
   
     return LaunchDescription(nodes)
