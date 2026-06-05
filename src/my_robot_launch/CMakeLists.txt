@@ -7,12 +7,10 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 
-# Install launch directory
 install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
 
-# Install rviz directory
 install(DIRECTORY rviz/
   DESTINATION share/${PROJECT_NAME}/rviz
 )
