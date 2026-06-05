@@ -87,9 +87,9 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0}, angul
 # part 3: ROS2 Keyboard Teleoperation Node
 
 A custom ROS2 node that reads keyboard input and publishes velocity commands to control a TurtleBot3 robot in the Gazebo simulator.
-
+Along with a launch packae for controlling TurtleBot3 robot in Gazebo simulator with Rviz visualization
 ---
-
+# Package 1: keyboard_teleop
 ## Overview
 
 This package implements a keyboard teleoperation node for ROS2, inspired by the [`teleop_twist_keyboard`](https://github.com/ros2/teleop_twist_keyboard) package. It maps WASD and arrow keys to `geometry_msgs/Twist` messages published on the `/cmd_vel` topic, with an emergency stop triggered by the spacebar.
@@ -222,6 +222,99 @@ These can be adjusted at the top of `keyboard_teleop_node.py`.
 
 ## Verification
 
-Robot movement was verified by monitoring `/odom` and `/cmd_vel` topics. Position and orientation values in `/odom` updated in response to keyboard input, and `/cmd_vel` showed correct `linear.x` and `angular.z` values matching the expected velocity constants.
+Robot movement was verified by monitoring `/odom` and `/cmd_vel` topics. Position and orientation values in `/odom` updated in response to keyboard input, and `/cmd_vel` showed correct `linear.x` and `angular.z` values matching the expected velocity constants. It was also tested and ran on Gazebo 3D simulator
 
-[Still working on it] 
+---
+# Package 2: my_robot_launch
+
+## Overview 
+This package provides a launch file that starts the `robot_state_publisher` and opens RViz2 with a custom configuration. It is designed to work alongside the `keyboard_teleop` package to give a full teleoperation and visualization setup for TurtleBot3 Burger.
+
+---
+## Features
+
+Launches `robot_state_publisher` with TurtleBot3 Burger URDF
+Opens RViz2 automatically with a pre-configured view
+Fixed Frame set to `odom`
+Displays the 3D robot model
+Visualises LiDAR data from `/scan`
+Single command to bring up the full visualization stack
+
+Package Structure
+```
+my_robot_launch/
+├── CMakeLists.txt
+├── package.xml
+├── launch/
+│   └── robot_launch.py
+└── rviz/
+    └── robot_config.rviz
+```
+---
+
+### Requirements
+ROS2 Jazzy
+`robot_state_publisher`
+`rviz2`
+`launch_ros`
+TurtleBot3 packages
+
+---
+### Installation
+```bash
+# Navigate to your ROS2 workspace source folder
+cd ~/ros2_ws/src
+
+# Create the package (if starting fresh)
+ros2 pkg create --build-type ament_cmake my_robot_launch
+
+# Add the launch/ and rviz/ folders with the provided files
+
+# Build
+cd ~/ros2_ws
+colcon build --packages-select my_robot_launch
+source install/setup.bash
+```
+---
+### Usage
+1. Launch RViz and robot state publisher
+```bash
+ros2 launch my_robot_launch robot_launch.py
+```
+2. Run the teleop node (separate terminal)
+```bash
+source ~/ros2_ws/install/setup.bash
+ros2 run keyboard_teleop keyboard_teleop
+```
+> **Important:** The teleop node must be run in its own terminal since it requires an interactive keyboard input session.
+---
+How It Works
+What the Launch File Does
+```
+robot_launch.py
+      │
+      ├── robot_state_publisher  ← loads TurtleBot3 URDF, publishes /robot_description
+      │
+      └── rviz2                  ← opens with robot_config.rviz pre-loaded
+```
+RViz Configuration
+The `robot_config.rviz` file configures RViz2 with:
+Setting	Value
+Fixed Frame	`odom`
+RobotModel topic	`/robot_description`
+LaserScan topic	`/scan`
+
+**Note:** The instruction given asked for PointCould2 sensor but this does not capture the 2D vision for the LaserScan. Thus, it was replaced by the LaserScan
+
+---
+### Verification
+
+Once launched, RViz should display the TurtleBot3 robot model. When the teleop node is running in a separate terminal and Gazebo is active, the LiDAR scan points will appear around the robot and update in real time as it moves.
+
+The robot_launch.py gave an error code indicating that a package for the motor_driver is missing (Package was not provided in the material and not provided in the complete example)
+<img width="1212" height="160" alt="image" src="https://github.com/user-attachments/assets/4b02bcc5-ab52-4a6d-8d95-0c03800f578f" />
+
+The Rviz file, when launched separately, was successful and showed the 2D expected demonstration. 
+<img width="1256" height="838" alt="Screenshot 2026-06-05 105432" src="https://github.com/user-attachments/assets/a170203c-6823-4e40-b446-ea3411dba60d" />
+
+
