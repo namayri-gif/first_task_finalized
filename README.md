@@ -311,10 +311,11 @@ LaserScan topic	`/scan`
 
 Once launched, RViz should display the TurtleBot3 robot model. When the teleop node is running in a separate terminal and Gazebo is active, the LiDAR scan points will appear around the robot and update in real time as it moves.
 
-The robot_launch.py gave an error code indicating that a package for the motor_driver is missing (Package was not provided in the material and not provided in the complete example)
-<img width="1212" height="160" alt="image" src="https://github.com/user-attachments/assets/4b02bcc5-ab52-4a6d-8d95-0c03800f578f" />
+The robot_launch.py launched successfully and it launched the rviz file as requested
+<img width="1919" height="917" alt="Screenshot 2026-06-05 185033" src="https://github.com/user-attachments/assets/df02f49c-bf7c-47a4-8be2-b3067a5fc171" />
 
 The Rviz file, when launched separately, was successful and showed the 2D expected demonstration. 
-<img width="1256" height="838" alt="Screenshot 2026-06-05 105432" src="https://github.com/user-attachments/assets/a170203c-6823-4e40-b446-ea3411dba60d" />
+<img width="985" height="736" alt="image" src="https://github.com/user-attachments/assets/57a19476-9c7f-4750-8e05-e4fb8dd945ee" />
+
 
 
